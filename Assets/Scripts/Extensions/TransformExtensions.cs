@@ -6,9 +6,9 @@ namespace Apocalypse {
             if (moveVec == Vector2.zero)
                 return;
 
-            float angle = Mathf.Atan2(moveVec.y, moveVec.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(0f, moveVec.x) * Mathf.Rad2Deg + 180f;
 
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
         }
     }
 }
