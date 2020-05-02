@@ -5,7 +5,7 @@ public class EntranceInternalShop : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Movement player = collision.gameObject.GetComponent<Movement>();
+        TestOnlyMovement player = collision.gameObject.GetComponent<TestOnlyMovement>();
 
         if (player != null)
         {

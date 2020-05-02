@@ -11,6 +11,7 @@ public class ShopTimer : MonoBehaviour
     [SerializeField]
     private float timeToWait;
 
+    [HideInInspector]
     public Shop owner;
     private float currentTimerToBuy;
     private float currentTimerToWait;
@@ -18,8 +19,8 @@ public class ShopTimer : MonoBehaviour
 
     void Start()
     {
-        currentTimerToBuy = 0;
-        currentTimerToWait = 0;
+        currentTimerToBuy = 20;
+        currentTimerToWait = 5;
         isClosed = false;
     }
 

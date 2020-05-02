@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerStats))]
-public class Movement : MonoBehaviour
+public class TestOnlyMovement : MonoBehaviour
 {
     [HideInInspector]
     public bool justSpawned = false;
