@@ -1,0 +1,49 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class InternalShop : MonoBehaviour
+{
+    public Vector3 GetSpawnPointPosition => spawnPosition.position;
+
+    public Shop Owner { get; set; }
+
+    [SerializeField]
+    private Transform spawnPosition;
+    private ShopItem[] availableItemSpot;
+
+    private void Awake()
+    {
+        availableItemSpot = GetComponentsInChildren<ShopItem>(true);
+
+        for(int i = 0; i < availableItemSpot.Length; i++)
+        {
+            availableItemSpot[i].gameObject.SetActive(false);
+        }
+    }
+
+    public void SetupShop()
+    {
+        List<int> indexAlreadyUsed = new List<int>();
+
+        for(int i = 0; i < Owner.ItemsShop.Count; i++)
+        {
+            int index = GenerateUntilUnique();
+            ShopItem curr = availableItemSpot[index];
+            curr.gameObject.SetActive(true);
+            curr.Model = Owner.ItemsShop[i];
+        }
+        
+        int GenerateUntilUnique()
+        {
+            int currIndex = Random.Range(0, availableItemSpot.Length);
+            if (indexAlreadyUsed.Contains(currIndex))
+            {
+                return GenerateUntilUnique();
+            }
+
+            indexAlreadyUsed.Add(currIndex);
+            return currIndex;
+        }
+    }
+}
