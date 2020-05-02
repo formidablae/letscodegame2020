@@ -1,10 +1,19 @@
-﻿namespace Apocalypse {
-    public class PlayerStats { //todo mono? vedremo text 
-        public int Score { get; private set; }
+﻿using UnityEngine;
 
-        public void IncScore(int x) {
-            Score += x;
+namespace Apocalypse {
+    public class PlayerStats : MonoBehaviour {
+        public int Score
+        {
+            get => score;
+            set
+            {
+                score = value;
+                Debug.Log(score);
+                //Update UI
+            }
         }
+
+        private int score;
     }
 }
 
