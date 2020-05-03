@@ -9,24 +9,27 @@ namespace Apocalypse {
         [HideInInspector] public Vector3 playerPositionBeforeInternalShop;
         [SerializeField] private float radiusAction = 4.5f;
         [SerializeField] private GameObject RespawnP;
-        private AudioSource _audioPlayer;
-        private Dictionary<string, AudioClip> _sounds;
-        private PlayerStats _stats;
         private const float Speed = 50f;
         private const float RespawnTPause = 3f;
         private const float DamageTimer = .43f;
         private const float HealingTimer = .25f;
+        private SpriteRenderer _spriteRndr;
+        private AudioSource _audioPlayer;
+        private Dictionary<string, AudioClip> _sounds;
+        private PlayerStats _stats;
+        private Rigidbody2D _rb;
         private float _infectionDamage;
         private float _healthRestore;
         private bool _respawing;
         private bool _infected;
         private float _health;
-        private Vector2 _moveVec;
+        private Vector2 _velocity;
 
         private void Awake() {
             _stats = GetComponent<PlayerStats>();
+            _rb = GetComponent<Rigidbody2D>();
+            _spriteRndr = GetComponentInChildren<SpriteRenderer>();
             RespawnP = GameObject.FindWithTag("Respawn");
-            _moveVec = new Vector2(0f, 0f);
             _respawing = false;
             _infected = false;
             _health = 100f;
@@ -34,25 +37,33 @@ namespace Apocalypse {
             _sounds = new Dictionary<string, AudioClip>() {
                 {"walk", Resources.Load("Audio/Effects/footstep") as AudioClip}
             };
-
-            transform.position = _moveVec;
         }
 
         private void Update() {
             if (_respawing)
                 return;
 
-            if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))) {
-                _moveVec.x = Input.GetAxisRaw("Horizontal") * Speed;
-                _moveVec.y = Input.GetAxisRaw("Vertical") * Speed;
+            _velocity = _rb.velocity;
+            _velocity.x = 0;
+            _velocity.y = 0;
 
-            } else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) {
-                _moveVec.x = Input.GetAxisRaw("Horizontal") * Speed;
+            if (Input.GetKey(KeyCode.W))
+                _velocity.y = Speed;
+            else if (Input.GetKey(KeyCode.S))
+                _velocity.y = -Speed;
 
-            } else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) {
-                _moveVec.y = Input.GetAxisRaw("Vertical") * Speed;
-                
-            } else if (Input.GetKeyDown(KeyCode.E)) {
+            if (Input.GetKey(KeyCode.A)) {
+                _velocity.x = -Speed;
+                _spriteRndr.flipX = false;
+
+            } else if (Input.GetKey(KeyCode.D)) {
+                _velocity.x = Speed;
+                _spriteRndr.flipX = true;
+            }
+
+            _rb.velocity = _velocity;
+            
+            if (Input.GetKeyDown(KeyCode.E)) {
                 ShopItem nearerGameItem = GetNearerItem();
 
                 if (nearerGameItem != null)
@@ -60,34 +71,17 @@ namespace Apocalypse {
             }
         }
 
-        private void FixedUpdate() {
-            Move();
-        }
-        
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, radiusAction);
         }
 
-        private void Move() {
-            if (_respawing)
-                return;
-
-            _moveVec.x *= Time.fixedDeltaTime;
-            _moveVec.y *= Time.fixedDeltaTime;
-
-            transform.FlipToDirection2D(_moveVec);
-            transform.Translate(_moveVec, Space.World);
-        }
-
         private void Respawn() {//todo reset scene?
             StopAllCoroutines();
-            _moveVec = RespawnP.transform.position;
             
             _health = 100f;
             _infected = false;
-            transform.position = _moveVec;
             StartCoroutine(nameof(RespawnPause));
         }
 
