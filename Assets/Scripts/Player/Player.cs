@@ -28,11 +28,18 @@ namespace Apocalypse {
         private void Update() {
             if (_respawing)
                 return;
-            
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+
+            if ((Input.GetKey(KeyCode.W) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))) ||
+                (Input.GetKey(KeyCode.S) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))) {
                 _moveVec.x = Input.GetAxisRaw("Horizontal") * Speed;
-            else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
                 _moveVec.y = Input.GetAxisRaw("Vertical") * Speed;
+
+            } else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) {
+                _moveVec.x = Input.GetAxisRaw("Horizontal") * Speed;
+
+            } else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) {
+                _moveVec.y = Input.GetAxisRaw("Vertical") * Speed;
+            }
         }
 
         private void FixedUpdate() {
