@@ -44,7 +44,7 @@ namespace Apocalypse {
             GameObject enemy = _pool[idx];
 
             enemy.transform.position = transform.position;
-            enemy.GetComponent<EnemyAI>().SetStatic();
+            //enemy.GetComponent<EnemyAI>().SetStatic();
             enemy.SetActive(true);
         }
 
@@ -56,9 +56,9 @@ namespace Apocalypse {
                 e.transform.position = pos;
                 e.SetActive(true);
 
-                y -= e.GetComponent<SpriteRenderer>().bounds.size.y;
+                y -= e.GetComponentInChildren<SpriteRenderer>().bounds.size.y;
 
-                pos.Set(pos.x, y, pos.z);
+                pos.Set(pos.x, y, 0f);
             }
         }
     }

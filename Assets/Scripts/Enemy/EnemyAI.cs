@@ -4,9 +4,9 @@ using Random = UnityEngine.Random;
 
 namespace Apocalypse {
     public class EnemyAI : MonoBehaviour {
-        private const float DirectionChangeT = 4f;
+        private const float DirectionChangeT = 2f;
         private const float CharVelocity = 1.5f;
-        private const float Speed = 1.3f;
+        private const float Speed = 40f;
         private bool _following;
         private GameObject _player;
         private float _lastDirection;
@@ -29,9 +29,6 @@ namespace Apocalypse {
                 return;
             }
 
-            if (_isStatic)
-                return;
-            
             if (Time.time - _lastDirection > DirectionChangeT){
                 _lastDirection = Time.time;
                 calcuateNewMovementVector();
@@ -76,7 +73,6 @@ namespace Apocalypse {
         }
 
         private void OnCollisionEnter2D(Collision2D other) {
-            Debug.Log("coll");
             calcuateNewMovementVector();
         }
         
@@ -84,10 +80,6 @@ namespace Apocalypse {
             Enemy.InfectionCharge = false;
             yield return new WaitForSeconds(Random.Range(3f, 6f));
             Enemy.InfectionCharge = true;
-        }
-
-        public void SetStatic() {
-            _isStatic = true;
         }
 
         public void RechargeInfection() {

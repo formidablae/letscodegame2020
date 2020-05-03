@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Apocalypse {
         private const float DamageTimer = .43f;
         private const float HealingTimer = .25f;
         private SpriteRenderer _spriteRndr;
-        private AudioSource _audioPlayer;
+        private Dictionary<string, AudioSource> _audioPlayers;
         private Dictionary<string, AudioClip> _sounds;
         private PlayerStats _stats;
         private Rigidbody2D _rb;
@@ -30,9 +31,19 @@ namespace Apocalypse {
             _spriteRndr = GetComponentInChildren<SpriteRenderer>();
             _infected = false;
             _health = 100f;
-            _audioPlayer = new AudioSource();
+            _audioPlayers = new Dictionary<string, AudioSource>() {
+                {"walkp", gameObject.AddComponent<AudioSource>()},
+                {"pickp", gameObject.AddComponent<AudioSource>()},
+                {"infectedp", gameObject.AddComponent<AudioSource>()},
+                {"dmgp", gameObject.AddComponent<AudioSource>()},
+                {"hitsmthgp", gameObject.AddComponent<AudioSource>()}
+            };
             _sounds = new Dictionary<string, AudioClip>() {
-                {"walk", Resources.Load("Audio/Effects/footstep") as AudioClip}
+                {"walk", Resources.Load<AudioClip>("Audio/Effects/footstep")},
+                {"infected", Resources.Load<AudioClip>("Audio/Effects/infected")},
+                {"pickitm", Resources.Load<AudioClip>("Audio/Effects/pick-item")},
+                {"lifetick", Resources.Load<AudioClip>("Audio/Effects/loose-life-tick")},
+                {"hitsmthg", Resources.Load<AudioClip>("Audio/Effects/closedDoor")}
             };
         }
 
@@ -44,30 +55,71 @@ namespace Apocalypse {
             _velocity.x = 0;
             _velocity.y = 0;
 
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.W)) {
                 _velocity.y = Speed;
-            else if (Input.GetKey(KeyCode.S))
+                
+                PlaySound("walkp", "walk");
+                
+            } else if (Input.GetKey(KeyCode.S)) {
                 _velocity.y = -Speed;
+                
+                PlaySound("walkp", "walk");
+            }
 
             if (Input.GetKey(KeyCode.A)) {
                 _velocity.x = -Speed;
                 _spriteRndr.flipX = false;
+                
+                PlaySound("walkp", "walk");
 
             } else if (Input.GetKey(KeyCode.D)) {
                 _velocity.x = Speed;
                 _spriteRndr.flipX = true;
+                
+                PlaySound("walkp", "walk");
             }
 
             _rb.velocity = _velocity;
             
+            if (_velocity == Vector2.zero)
+                PlaySound("walkp", "stop");
+
             if (Input.GetKeyDown(KeyCode.E)) {
                 ShopItem nearerGameItem = GetNearerItem();
 
-                if (nearerGameItem != null)
+                if (nearerGameItem != null) {
                     nearerGameItem.OnUsed(_stats);
+                    PlaySound("pickp", "pick");
+                }
             }
         }
 
+        private void PlaySound(string player, string clip) {
+            if (clip == "stop") // ma si, anche lo stop sarà un audio :P
+                _audioPlayers[player].Stop();
+            else if (_audioPlayers[player].isPlaying)
+                return;
+            
+            switch (clip) {
+                case "walk":
+                    _audioPlayers[player].PlayOneShot(_sounds["walk"]);
+                    break;
+                case "pick":
+                    _audioPlayers[player].PlayOneShot(_sounds["pickitm"]);
+                    break;
+                case "infected":
+                    _audioPlayers[player].PlayOneShot(_sounds["infected"]);
+                    break;
+                case "dmg-tick":
+                    _audioPlayers[player].PlayOneShot(_sounds["lifetick"]);
+                    break;
+                case "hit-smthg":
+                    _audioPlayers[player].PlayOneShot(_sounds["hitsmthg"]);
+                    break;
+                default:
+                    break;
+            }
+        }
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
@@ -82,13 +134,19 @@ namespace Apocalypse {
             _infected = true;
             _healthRestore = dmg / 10;
             _infectionDamage = dmg / (float)7.2;
+            
+            PlaySound("infectedp", "infection");
 
-            if (_health <= 0) //todo game over?
+            if (_health <= 0)
                 UIManager.Instance.OnGameFinished(false);
             else
                 StartCoroutine(nameof(Infection));
         }
-        
+
+        private void OnCollisionEnter2D(Collision2D other) {
+            PlaySound("hitsmthgp", "hit-smthg");
+        }
+
         private ShopItem GetNearerItem()
         {
             Collider2D[] collisionWith = new Collider2D[3];
@@ -142,6 +200,7 @@ namespace Apocalypse {
             while (timer < DamageTimer) {
                 _health -= _infectionDamage;
                 timer += Time.deltaTime;
+                PlaySound("dmgp", "dmg-tick");
 
                 if (_health <= 0)
                     UIManager.Instance.OnGameFinished(false);
