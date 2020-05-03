@@ -1,10 +1,18 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Apocalypse {
+    [RequireComponent(typeof(PlayerStats))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class Player : MonoBehaviour {
-        [SerializeField] private GameObject RespawnP; 
-        private const float Speed = 2.89f;
+        [HideInInspector] public Vector3 playerPositionBeforeInternalShop;
+        [SerializeField] private float radiusAction = 4.5f;
+        [SerializeField] private GameObject RespawnP;
+        private AudioSource _audioPlayer;
+        private Dictionary<string, AudioClip> _sounds;
+        private PlayerStats _stats;
+        private const float Speed = 50f;
         private const float RespawnTPause = 3f;
         private const float DamageTimer = .43f;
         private const float HealingTimer = .25f;
@@ -16,11 +24,16 @@ namespace Apocalypse {
         private Vector2 _moveVec;
 
         private void Awake() {
+            _stats = GetComponent<PlayerStats>();
             RespawnP = GameObject.FindWithTag("Respawn");
             _moveVec = new Vector2(0f, 0f);
             _respawing = false;
             _infected = false;
             _health = 100f;
+            _audioPlayer = new AudioSource();
+            _sounds = new Dictionary<string, AudioClip>() {
+                {"walk", Resources.Load("Audio/Effects/footstep") as AudioClip}
+            };
 
             transform.position = _moveVec;
         }
@@ -38,11 +51,23 @@ namespace Apocalypse {
 
             } else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) {
                 _moveVec.y = Input.GetAxisRaw("Vertical") * Speed;
+                
+            } else if (Input.GetKeyDown(KeyCode.E)) {
+                ShopItem nearerGameItem = GetNearerItem();
+
+                if (nearerGameItem != null)
+                    nearerGameItem.OnUsed(_stats);
             }
         }
 
         private void FixedUpdate() {
             Move();
+        }
+        
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, radiusAction);
         }
 
         private void Move() {
@@ -80,6 +105,39 @@ namespace Apocalypse {
             else
                 StartCoroutine(nameof(Infection));
         }
+        
+        private ShopItem GetNearerItem()
+        {
+            Collider2D[] collisionWith = new Collider2D[3];
+            int collisions = Physics2D.OverlapCircleNonAlloc(transform.position, radiusAction, collisionWith);
+
+            ShopItem nearerGameItem = null;
+            float distanceNearer = 0;
+
+            for (int i = 0; i < collisions; i++)
+            {
+                ShopItem current = collisionWith[i].GetComponent<ShopItem>();
+                if (current != null)
+                {
+                    if (nearerGameItem == null)
+                    {
+                        nearerGameItem = current;
+                        distanceNearer = Vector2.Distance(transform.position, current.transform.position);
+                    }
+                    else
+                    {
+                        float currDist = Vector2.Distance(transform.position, current.transform.position);
+                        if (currDist < distanceNearer)
+                        {
+                            nearerGameItem = current;
+                            distanceNearer = currDist;
+                        }
+                    }
+                }
+            }
+
+            return nearerGameItem;
+        }
 
         private IEnumerator Healing() {
             float timer = 0f;
@@ -90,7 +148,7 @@ namespace Apocalypse {
                 
                 _health += _healthRestore;
                 timer += Time.deltaTime;
- Debug.Log("heal "+_healthRestore+" "+_health);
+                
                 yield return new WaitForSeconds(1f);
             }
         }
@@ -101,7 +159,7 @@ namespace Apocalypse {
             while (timer < DamageTimer) {
                 _health -= _infectionDamage;
                 timer += Time.deltaTime;
-Debug.Log("health "+_health+"  dmg "+_infectionDamage+" timer "+timer);
+                
                 if (_health <= 0) // todo game over?
                     Respawn();
  
