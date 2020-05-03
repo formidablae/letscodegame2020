@@ -2,24 +2,25 @@
 using UnityEngine;
 
 namespace Apocalypse {
-    public class Player : MonoBehaviour { //todo tune costanti
-        private const float Speed = 6f;
+    public class Player : MonoBehaviour {
+        [SerializeField] private GameObject RespawnP; 
+        private const float Speed = 2.89f;
         private const float RespawnTPause = 3f;
-        private const float DamageTimer = 7f;
-        private const float HealingTimer = 4f;
-        private const float Damage = .5f;
-        private const float HealthAdd = .5f;
+        private const float DamageTimer = .43f;
+        private const float HealingTimer = .25f;
+        private float _infectionDamage;
+        private float _healthRestore;
         private bool _respawing;
-        private bool _outside;
+        private bool _infected;
         private float _health;
         private Vector2 _moveVec;
-        private Camera _cam;
 
         private void Awake() {
-            _cam = Camera.main;
+            RespawnP = GameObject.FindWithTag("Respawn");
             _moveVec = new Vector2(0f, 0f);
             _respawing = false;
-            _outside = true;
+            _infected = false;
+            _health = 100f;
 
             transform.position = _moveVec;
         }
@@ -38,12 +39,7 @@ namespace Apocalypse {
             Move();
         }
 
-        // Debug print
-        public override string ToString() {
-            return "Player " + _health + ", outside: " + _outside + ", position: " + _moveVec;
-        }
-
-        private void Move() { //todo clamp, req mappa
+        private void Move() {
             if (_respawing)
                 return;
 
@@ -52,21 +48,26 @@ namespace Apocalypse {
 
             transform.FlipToDirection2D(_moveVec);
             transform.Translate(_moveVec, Space.World);
-            
-            if (_outside)
-                _cam.transform.Translate(_moveVec, Space.World);
         }
 
         private void Respawn() {//todo reset scene?
-            _moveVec.Set(0f, 0f);
+            StopAllCoroutines();
+            _moveVec = RespawnP.transform.position;
             
             _health = 100f;
+            _infected = false;
             transform.position = _moveVec;
             StartCoroutine(nameof(RespawnPause));
         }
 
-        public void TakeDamage(float dmg) {
+        public void Infect(float dmg) {
+            if (_infected)
+                return;
+            
             _health -= dmg;
+            _infected = true;
+            _healthRestore = dmg / 10;
+            _infectionDamage = dmg / (float)7.2;
 
             if (_health <= 0) //todo game over?
                 Respawn();
@@ -74,35 +75,39 @@ namespace Apocalypse {
                 StartCoroutine(nameof(Infection));
         }
 
-        public void EnterMarket() {
-            _outside = false;
-        }
-
-        private IEnumerable Healing() {
+        private IEnumerator Healing() {
             float timer = 0f;
             
             while (timer < HealingTimer) {
-                _health += HealthAdd;
+                if (_infected)
+                    yield break;
+                
+                _health += _healthRestore;
                 timer += Time.deltaTime;
- 
-                yield return null;
+ Debug.Log("heal "+_healthRestore+" "+_health);
+                yield return new WaitForSeconds(1f);
             }
         }
 
-        private IEnumerable Infection() {
+        private IEnumerator Infection() {
             float timer = 0f;
             
             while (timer < DamageTimer) {
-                _health -= Damage;
+                _health -= _infectionDamage;
                 timer += Time.deltaTime;
+Debug.Log("health "+_health+"  dmg "+_infectionDamage+" timer "+timer);
+                if (_health <= 0) // todo game over?
+                    Respawn();
  
-                yield return null;
+                yield return new WaitForSeconds(1f);
             }
-
+            
+            _infected = false;
+            
             StartCoroutine(nameof(Healing));
         }
         
-        private IEnumerable RespawnPause() {
+        private IEnumerator RespawnPause() {
             _respawing = true;
             yield return new WaitForSeconds(RespawnTPause);
             _respawing = false;

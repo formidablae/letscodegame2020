@@ -6,6 +6,10 @@ TagManager:
   tags:
   - InternalShopCamera
   - CityCamera
+  - enemy
+  - infectionCollider
+  - enemySpawnOutside
+  - enemySpawnSingle
   layers:
   - Default
   - TransparentFX
