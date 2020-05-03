@@ -186,6 +186,11 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetSceneByName("ShopScene").buildIndex, LoadSceneMode.Single);
     }
 
+    public void GoMenu()
+    {
+        SceneManager.LoadScene(SceneManager.GetSceneByName("MainMenu").buildIndex, LoadSceneMode.Single);
+    }
+
     public void OnGameFinished(bool win)
     {
         if (Finished)
