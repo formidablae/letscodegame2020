@@ -1171,6 +1171,36 @@ Transform:
   m_Father: {fileID: 1076236500}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &614847793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 614847794}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &614847794
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614847793}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -27.6, y: 6.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1076236500}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &620363632
 GameObject:
   m_ObjectHideFlags: 0
@@ -2445,6 +2475,7 @@ Transform:
   - {fileID: 1298407075}
   - {fileID: 1903485533}
   - {fileID: 1317238082}
+  - {fileID: 614847794}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2482,7 +2513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6de61dacb4c9f04e89bfad2a4e77dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPosition: {fileID: 1317238082}
+  spawnPosition: {fileID: 614847794}
 --- !u!1 &1097917223
 GameObject:
   m_ObjectHideFlags: 0
@@ -2785,7 +2816,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1317238080}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -26.9, y: -0.79, z: 0}
+  m_LocalPosition: {x: -26.9, y: -1.4, z: 0}
   m_LocalScale: {x: 0.9205683, y: 0.32150567, z: 1}
   m_Children: []
   m_Father: {fileID: 1076236500}
@@ -2850,6 +2881,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a9596dd7f489f74191a87da2ee49cc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  internalShop: {fileID: 0}
 --- !u!1 &1337520296
 GameObject:
   m_ObjectHideFlags: 0

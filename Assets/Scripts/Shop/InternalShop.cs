@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,7 +29,16 @@ public class InternalShop : MonoBehaviour
 
         for(int i = 0; i < Owner.ItemsShop.Count; i++)
         {
-            int index = GenerateUntilUnique();
+            int index;
+
+            try
+            {
+                index = GenerateUntilUnique();
+            } catch (StackOverflowException)
+            {
+                break;
+            }
+
             ShopItem curr = availableItemSpot[index];
 
             if(!curr.NeedChangeSprite)
@@ -40,7 +49,7 @@ public class InternalShop : MonoBehaviour
         
         int GenerateUntilUnique()
         {
-            int currIndex = Random.Range(0, availableItemSpot.Length);
+            int currIndex = UnityEngine.Random.Range(0, availableItemSpot.Length);
             if (indexAlreadyUsed.Contains(currIndex))
             {
                 return GenerateUntilUnique();

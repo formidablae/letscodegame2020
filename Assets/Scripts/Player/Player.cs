@@ -9,7 +9,6 @@ namespace Apocalypse {
         [HideInInspector] public bool justSpawned = false;
         [HideInInspector] public Vector3 playerPositionBeforeInternalShop;
         [SerializeField] private float radiusAction = 4.5f;
-        [SerializeField] private GameObject RespawnP;
         private const float Speed = 50f;
         private const float RespawnTPause = 3f;
         private const float DamageTimer = .43f;
@@ -21,7 +20,6 @@ namespace Apocalypse {
         private Rigidbody2D _rb;
         private float _infectionDamage;
         private float _healthRestore;
-        private bool _respawing;
         private bool _infected;
         private float _health;
         private Vector2 _velocity;
@@ -30,8 +28,6 @@ namespace Apocalypse {
             _stats = GetComponent<PlayerStats>();
             _rb = GetComponent<Rigidbody2D>();
             _spriteRndr = GetComponentInChildren<SpriteRenderer>();
-            RespawnP = GameObject.FindWithTag("Respawn");
-            _respawing = false;
             _infected = false;
             _health = 100f;
             _audioPlayer = new AudioSource();
@@ -41,7 +37,7 @@ namespace Apocalypse {
         }
 
         private void Update() {
-            if (_respawing)
+            if (UIManager.Instance.Finished)
                 return;
 
             _velocity = _rb.velocity;
@@ -78,14 +74,6 @@ namespace Apocalypse {
             Gizmos.DrawWireSphere(transform.position, radiusAction);
         }
 
-        private void Respawn() {//todo reset scene?
-            StopAllCoroutines();
-            
-            _health = 100f;
-            _infected = false;
-            StartCoroutine(nameof(RespawnPause));
-        }
-
         public void Infect(float dmg) {
             if (_infected)
                 return;
@@ -96,7 +84,7 @@ namespace Apocalypse {
             _infectionDamage = dmg / (float)7.2;
 
             if (_health <= 0) //todo game over?
-                Respawn();
+                UIManager.Instance.OnGameFinished(false);
             else
                 StartCoroutine(nameof(Infection));
         }
@@ -154,9 +142,9 @@ namespace Apocalypse {
             while (timer < DamageTimer) {
                 _health -= _infectionDamage;
                 timer += Time.deltaTime;
-                
-                if (_health <= 0) // todo game over?
-                    Respawn();
+
+                if (_health <= 0)
+                    UIManager.Instance.OnGameFinished(false);
  
                 yield return new WaitForSeconds(1f);
             }
@@ -164,12 +152,6 @@ namespace Apocalypse {
             _infected = false;
             
             StartCoroutine(nameof(Healing));
-        }
-        
-        private IEnumerator RespawnPause() {
-            _respawing = true;
-            yield return new WaitForSeconds(RespawnTPause);
-            _respawing = false;
         }
     }
 }

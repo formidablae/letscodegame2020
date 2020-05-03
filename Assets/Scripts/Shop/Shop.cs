@@ -12,9 +12,11 @@ public class Shop : MonoBehaviour
 
     [SerializeField]
     private uint id;
+    public Transform outsideSpawnPoint;
 
     private bool isClosed;
     private bool needRefresh;
+    public bool playerInside = false;
 
     private void Awake()
     {
@@ -27,6 +29,7 @@ public class Shop : MonoBehaviour
     public void OnShopTimerCompleted()
     {
         isClosed = true;
+        EntranceInternalShop.ForcePlayerOut(this);
     }
 
     public void OnShopTimerRestart()
@@ -52,20 +55,14 @@ public class Shop : MonoBehaviour
                 return;
             }
 
-            if(player.justSpawned)
-            {
-                player.justSpawned = false;
-                return;
-            }
+            playerInside = true;
 
-            if(needRefresh)
+            if (needRefresh)
                 RefreshItems();
 
             SceneManager.LoadScene("InternalShop", LoadSceneMode.Additive);
             SceneManager.MoveGameObjectToScene(player.gameObject, SceneManager.GetSceneByName("InternalShop"));
-
-            player.justSpawned = true;
-            player.playerPositionBeforeInternalShop = player.transform.position;
+            player.playerPositionBeforeInternalShop = outsideSpawnPoint.position;
             StartCoroutine(SetupPlayerInternalShop(player.gameObject));
         }
     }

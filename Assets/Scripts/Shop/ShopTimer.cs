@@ -38,6 +38,9 @@ public class ShopTimer : MonoBehaviour
 
     void Update()
     {
+        if (UIManager.Instance.Finished)
+            return;
+
         if (isClosed)
             UpdateTimeToWait();
         else

@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -26,13 +29,18 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text[] timerShopsLabel;
 
+    [Header("Main Image Result Menu")]
+    [SerializeField]
+    private Image imageBackgroundResult;
+
     private Coroutine lastCoroutine;
 
     // precalculcated consts
     private const int MINUTES = 60;
     private const int HOURS = 60 * 60;
     private const int DAYS = 60 * 60 * 24;
-    
+
+    public bool Finished { get; private set; }
 
     void Awake()
     {
@@ -40,16 +48,24 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
 
         Instance = this;
+        Finished = false;
+        imageBackgroundResult.gameObject.SetActive(false);
         UpdateTimerApocalypse(timerApocalypse);
     }
 
     private void Update()
     {
-        if(timerApocalypse > 0)
+        if (UIManager.Instance.Finished)
+            return;
+
+        if (timerApocalypse > 0)
         {
             timerApocalypse -= (speedTimersMultiplier * baseMultiplier * Time.deltaTime);
-            if (timerApocalypse < 0)
+            if (timerApocalypse <= 0)
+            {
                 timerApocalypse = 0;
+                OnGameFinished(true);
+            }
 
             UpdateTimerApocalypse(timerApocalypse);
         }
@@ -114,7 +130,7 @@ public class UIManager : MonoBehaviour
             TMP_Text element = timerShopsLabel[shopTimer.owner.Id];
 
             element.text = $"{shopTimer.owner.Id + 1}] ";
-            element.text = "<color=red>MOMENTANEAMENTE CHIUSO</color>";
+            element.text += "<color=red>CHIUSO</color>";
         }
     }
 
@@ -163,5 +179,32 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(sec);
         notificationLabel.gameObject.SetActive(false);
         lastCoroutine = null;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetSceneByName("ShopScene").buildIndex, LoadSceneMode.Single);
+    }
+
+    public void OnGameFinished(bool win)
+    {
+        if (Finished)
+            return;
+
+        Finished = true;
+        TMP_Text textComp = imageBackgroundResult.transform.Find("Content").Find("TextResult").GetComponent<TMP_Text>();
+        imageBackgroundResult.gameObject.SetActive(true);
+
+        if (win)
+        {
+            imageBackgroundResult.color = new Color(193 / 255, 255 / 255, 114 / 255, 1);
+            textComp.color = new Color(0 / 255, 255 / 255, 10 / 255, 1);
+            textComp.text = "Congratulazioni le tue provviste sono abbastanza per sopravvivere all'apocalisse!";
+        } else
+        {
+            imageBackgroundResult.color = new Color(255 / 255, 143 / 255, 114 / 255, 1);
+            textComp.color = new Color(255 / 255, 205 / 255, 0 / 255, 1);
+            textComp.text = "Sembra che tu non ce l'abbia fatta a sopravvivere, riprova nella tua prossima vita!";
+        }
     }
 }

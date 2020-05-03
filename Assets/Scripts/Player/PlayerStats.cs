@@ -8,8 +8,12 @@ namespace Apocalypse {
             set
             {
                 score = value;
-                if (score < 0)
+                if (score <= 0)
+                {
                     score = 0;
+                    UIManager.Instance.OnGameFinished(false);
+                }
+
                 UIManager.Instance.UpdatePlayerStats(score);
             }
         }
@@ -30,6 +34,9 @@ namespace Apocalypse {
 
         private void Update()
         {
+            if (UIManager.Instance.Finished)
+                return;
+
             if(score > 0)
             {
                 Score -= timeMultiplier * baseMultiplier * Time.deltaTime;
