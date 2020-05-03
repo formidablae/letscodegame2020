@@ -29,8 +29,7 @@ namespace Apocalypse {
             if (_respawing)
                 return;
 
-            if ((Input.GetKey(KeyCode.W) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))) ||
-                (Input.GetKey(KeyCode.S) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))) {
+            if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))) {
                 _moveVec.x = Input.GetAxisRaw("Horizontal") * Speed;
                 _moveVec.y = Input.GetAxisRaw("Vertical") * Speed;
 
