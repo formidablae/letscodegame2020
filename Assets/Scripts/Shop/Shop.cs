@@ -43,7 +43,7 @@ public class Shop : MonoBehaviour
         {
             if(isClosed)
             {
-                Debug.Log("Shop closed, try again later");
+                UIManager.Instance.PushNotification("Il negozio è chiuso, riprova pià tardi.");
                 return;
             }
 

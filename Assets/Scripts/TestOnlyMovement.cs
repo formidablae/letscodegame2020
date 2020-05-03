@@ -2,6 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerStats))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class TestOnlyMovement : MonoBehaviour
 {
     [HideInInspector]
@@ -15,39 +16,57 @@ public class TestOnlyMovement : MonoBehaviour
     [SerializeField]
     private float radiusAction;
 
+    private Rigidbody2D rb2D;
     private PlayerStats stats;
+    private Vector2 velocity;
 
     private void Awake()
     {
         stats = GetComponent<PlayerStats>();
+        rb2D = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
+        velocity = rb2D.velocity;
+
         if (Input.GetKey(KeyCode.W))
         {
-            transform.Translate(Vector3.up * speed * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.S))
+            velocity.y = speed;
+        } else if (Input.GetKey(KeyCode.S))
         {
-            transform.Translate(Vector3.down * speed * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.A))
+            velocity.y = -speed;
+        } else
         {
-            transform.Translate(Vector3.left * speed * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(Vector3.right * speed * Time.deltaTime);
+            velocity.y = 0;
         }
 
-        if(Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKey(KeyCode.A))
+        {
+            velocity.x = -speed;
+        } else if (Input.GetKey(KeyCode.D))
+        {
+            velocity.x = speed;
+        } else
+        {
+            velocity.x = 0;
+        }
+
+        rb2D.velocity = velocity;
+
+        if (Input.GetKeyDown(KeyCode.E))
         {
             ShopItem nearerGameItem = GetNearerItem();
 
             if (nearerGameItem != null)
                 nearerGameItem.OnUsed(stats);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, radiusAction);
     }
 
     private ShopItem GetNearerItem()

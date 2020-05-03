@@ -7,28 +7,44 @@ using Apocalypse;
 [RequireComponent(typeof(BoxCollider2D))]
 public class ShopItem : MonoBehaviour
 {
-    public ShopItemModel Model
-    {
-        get => model;
-        set
-        {
-            model = value;
-            spriteRenderer.sprite = model.Sprite;
-        }
-    }
-
+    public bool NeedChangeSprite => CompareTag("FridgeItem") || CompareTag("FrozenItem");
     private ShopItemModel model;
-    private SpriteRenderer spriteRenderer;
 
-    private void Awake()
+    [Header("Fridge and Forzen Only")]
+    [SerializeField]
+    private Sprite spriteItemEmpty;
+    [SerializeField]
+    private Sprite spriteItemAvailable;
+
+    private bool isEmpty = true;
+
+    public void Setup(ShopItemModel model)
     {
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        this.model = model;
+        isEmpty = false;
+
+        if(NeedChangeSprite)
+        {
+            GetComponent<SpriteRenderer>().sprite = spriteItemAvailable;
+        }
     }
 
     public void OnUsed(PlayerStats caller)
     {
+        if (isEmpty)
+            return;
+
+        UIManager.Instance.PushNotification("Hai raccolto " + model.Type + " che conferisce " + model.IncTimer + " durata.");
         caller.Score += model.IncTimer;
-        Destroy(gameObject);
+
+        if(NeedChangeSprite)
+        {
+            isEmpty = true;
+            GetComponent<SpriteRenderer>().sprite = spriteItemEmpty;
+        } else
+        {
+            Destroy(gameObject);
+        }
     }
 }
 

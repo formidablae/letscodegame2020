@@ -6,6 +6,12 @@ TagManager:
   tags:
   - InternalShopCamera
   - CityCamera
+  - TopRightItem
+  - BottomRightItem
+  - TopLeftItem
+  - BottomLeftItem
+  - FridgeItem
+  - FrozenItem
   layers:
   - Default
   - TransparentFX
@@ -15,7 +21,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - World
   - 
   - 
   - 

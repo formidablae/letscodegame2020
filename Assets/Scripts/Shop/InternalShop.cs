@@ -18,7 +18,8 @@ public class InternalShop : MonoBehaviour
 
         for(int i = 0; i < availableItemSpot.Length; i++)
         {
-            availableItemSpot[i].gameObject.SetActive(false);
+            if(!availableItemSpot[i].NeedChangeSprite)
+                availableItemSpot[i].gameObject.SetActive(false);
         }
     }
 
@@ -30,8 +31,11 @@ public class InternalShop : MonoBehaviour
         {
             int index = GenerateUntilUnique();
             ShopItem curr = availableItemSpot[index];
-            curr.gameObject.SetActive(true);
-            curr.Model = Owner.ItemsShop[i];
+
+            if(!curr.NeedChangeSprite)
+                curr.gameObject.SetActive(true);
+
+            curr.Setup(Owner.ItemsShop[i]);
         }
         
         int GenerateUntilUnique()
