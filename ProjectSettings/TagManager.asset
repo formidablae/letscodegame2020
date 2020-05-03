@@ -12,6 +12,10 @@ TagManager:
   - BottomLeftItem
   - FridgeItem
   - FrozenItem
+  - enemy
+  - infectionCollider
+  - enemySpawnOutside
+  - enemySpawnSingle
   layers:
   - Default
   - TransparentFX
