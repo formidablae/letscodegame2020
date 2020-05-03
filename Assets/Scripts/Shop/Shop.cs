@@ -2,11 +2,16 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Apocalypse;
 
 [RequireComponent(typeof(ShopTimer))]
 public class Shop : MonoBehaviour
 {
+    public uint Id => id;
     public List<ShopItemModel> ItemsShop { get; private set; }
+
+    [SerializeField]
+    private uint id;
 
     private bool isClosed;
     private bool needRefresh;
@@ -37,7 +42,7 @@ public class Shop : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        TestOnlyMovement player = collision.gameObject.GetComponent<TestOnlyMovement>();
+        Player player = collision.gameObject.GetComponent<Player>();
 
         if (player != null)
         {

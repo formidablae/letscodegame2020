@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 using Apocalypse;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -34,7 +32,7 @@ public class ShopItem : MonoBehaviour
         if (isEmpty)
             return;
 
-        UIManager.Instance.PushNotification("Hai raccolto " + model.Type + " che conferisce " + model.IncTimer + " durata.");
+        UIManager.Instance.NotifyItemTaken(model);
         caller.Score += model.IncTimer;
 
         if(NeedChangeSprite)

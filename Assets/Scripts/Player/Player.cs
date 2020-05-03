@@ -6,6 +6,7 @@ namespace Apocalypse {
     [RequireComponent(typeof(PlayerStats))]
     [RequireComponent(typeof(Rigidbody2D))]
     public class Player : MonoBehaviour {
+        [HideInInspector] public bool justSpawned = false;
         [HideInInspector] public Vector3 playerPositionBeforeInternalShop;
         [SerializeField] private float radiusAction = 4.5f;
         [SerializeField] private GameObject RespawnP;

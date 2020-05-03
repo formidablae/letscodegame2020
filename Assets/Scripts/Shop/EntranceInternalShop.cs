@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using Apocalypse;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class EntranceInternalShop : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        TestOnlyMovement player = collision.gameObject.GetComponent<TestOnlyMovement>();
+        Player player = collision.gameObject.GetComponent<Player>();
 
         if (player != null)
         {

@@ -10,11 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4614444619671640960}
   - component: {fileID: 4614444619671640961}
-  - component: {fileID: 4614444619671640967}
   - component: {fileID: 4614444619671640964}
   - component: {fileID: 4614444619671640966}
   m_Layer: 0
-  m_Name: Player
+  m_Name: PlayerTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,22 +55,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &4614444619671640967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4614444619671640962}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c42ae49547addcd40a40e13ae9f5c1e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  justSpawned: 0
-  playerPositionBeforeInternalShop: {x: 0, y: 0, z: 0}
-  speed: 50
-  radiusAction: 4.5
 --- !u!114 &4614444619671640964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5124163aac83dac5892a2f036cb2d4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startWithTimer: 7200
 --- !u!61 &4614444619671640966
 BoxCollider2D:
   m_ObjectHideFlags: 0
