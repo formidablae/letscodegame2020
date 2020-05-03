@@ -337,7 +337,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 97614794}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -194.184, y: -131.9, z: -10}
+  m_LocalPosition: {x: -194.189, y: -131.9, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1817817296}
@@ -897,6 +897,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1412256503}
     m_Modifications:
+    - target: {fileID: 6977213143473815516, guid: 02ccc5f4cb4af1d46a4d07dea209a84a,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6977213144193532520, guid: 02ccc5f4cb4af1d46a4d07dea209a84a,
         type: 3}
       propertyPath: m_Name
@@ -1476,6 +1481,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1412256503}
     m_Modifications:
+    - target: {fileID: 6977213143473815516, guid: 02ccc5f4cb4af1d46a4d07dea209a84a,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6977213144193532520, guid: 02ccc5f4cb4af1d46a4d07dea209a84a,
         type: 3}
       propertyPath: m_Name
@@ -1605,6 +1615,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1412256503}
   - component: {fileID: 1412256502}
+  - component: {fileID: 1412256504}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -1679,6 +1690,17 @@ Transform:
   m_Father: {fileID: 725118492}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!154 &1412256504
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1412256501}
+  m_Material: {fileID: 0}
+  m_Enabled: 1
+  m_TerrainData: {fileID: 0}
+  m_EnableTreeColliders: 0
 --- !u!1 &1514296525
 GameObject:
   m_ObjectHideFlags: 0
@@ -2210,7 +2232,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1725078333}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -194.184, y: -131.9, z: -10}
+  m_LocalPosition: {x: -194.189, y: -131.9, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2850,9 +2872,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4614444619671640961, guid: fa3ec0934ac85b844bdefa9797ebaecb,
+        type: 3}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4614444619671640962, guid: fa3ec0934ac85b844bdefa9797ebaecb,
         type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4614444619671640962, guid: fa3ec0934ac85b844bdefa9797ebaecb,
+        type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 4614444619671640963, guid: fa3ec0934ac85b844bdefa9797ebaecb,
@@ -2879,6 +2911,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1412256503}
     m_Modifications:
+    - target: {fileID: 6977213143473815516, guid: 02ccc5f4cb4af1d46a4d07dea209a84a,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6977213144193532520, guid: 02ccc5f4cb4af1d46a4d07dea209a84a,
         type: 3}
       propertyPath: m_Name
