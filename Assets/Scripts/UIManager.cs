@@ -188,7 +188,7 @@ public class UIManager : MonoBehaviour
 
     public void GoMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetSceneByName("MainMenu").buildIndex, LoadSceneMode.Single);
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 
     public void OnGameFinished(bool win)

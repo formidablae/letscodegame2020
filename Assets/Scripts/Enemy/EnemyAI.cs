@@ -15,12 +15,16 @@ namespace Apocalypse {
         private Vector2 _movPerSecond;
         private Vector2 _moveVec;
         public Enemy Enemy { get; set; }
+        private SpriteRenderer _spriteRndr;
+
 
         private void Awake() {
             _player = GameObject.FindWithTag("Player");
             _lastDirection = 0f;
             _following = false;
             _isStatic = false;
+            _spriteRndr = GetComponentInChildren<SpriteRenderer>();
+
         }
         
         private void Update() {
@@ -41,6 +45,8 @@ namespace Apocalypse {
                 _moveVec.x + (_movPerSecond.x * Time.deltaTime), 
                 _moveVec.y + (_movPerSecond.y * Time.deltaTime)
             );
+
+            _spriteRndr.flipX = (_movPerSecond.x > 0) ? true : false;
             
             transform.position = _moveVec;
         }
