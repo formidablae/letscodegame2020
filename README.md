@@ -8,7 +8,7 @@ It was the first place winning game in the competition.
 <h5>Program of the 3 days of the hackathon:</h5>
 <img src="./images/letscodegames2020_program.jpg" />
 
-<h5>Logo of **unoxteamteamxuno** team:</h5>
+<h5>Logo of unoxteamteamxuno team:</h5>
 <img src="./images/letscodegames2020_unoxteamteamxuno.jpg" />
 
 <h5>Final ranking of all teams (points, place, team name):</h5>
