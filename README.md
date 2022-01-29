@@ -1,5 +1,5 @@
 # letscodegame2020
-This is the game the team **unoxteamteamxuno** submitted to Let's Code Games 2020.
+This is the game the team **unoxteamteamxuno** submitted to Let's Code Games 2020 ([letscode.games](https://letscode.games/)).
 It was the first place winning game in the competition.
 
 <h5>Logo of the competition:</h5>
